@@ -1,0 +1,32 @@
+echo "define(`a',`1') define(`a',`2') a" | ./m4
+echo "define(`a',`define(`b',`define(`c',`done') c') b') a" | ./m4
+echo "define(`a',`1') undefine(`a') a" | ./m4
+echo "undefine(`undefined_macro')" | ./m4
+echo "define(`fallback',`defined') include(`nope')" | ./m4
+echo "sinclude(`nonexistent')" | ./m4
+echo "eval(`1+2')" | ./m4
+echo "eval(`(1+2')" | ./m4
+echo "eval(`a+b')" | ./m4
+echo "traceon(`a') define(`a',`x') a traceoff(`a') a" | ./m4
+echo "pushdef(`x',`1') pushdef(`x',`2') x popdef(`x') x" | ./m4
+echo "pushdef(`y',`a') popdef(`y') popdef(`y')" | ./m4
+echo "define(`x',`$10') x" | ./m4
+echo "define(`z',`$1 $2 $3 $4 $5 $6 $7 $8 $9 $10') z(a,b,c,d,e,f,g,h,i,j)" | ./m4
+echo "define(`a',`b') define(`b',`c') define(`c',`final') a" | ./m4
+echo "define(`r1',`r2') define(`r2',`r3') define(`r3',`done') r1" | ./m4
+echo "define(`oops',`unbalanced) oops" | ./m4
+echo "define(`x',\"quoted\") x" | ./m4
+echo "define(`a',`1') undefine(`a') define(`a',`2') a" | ./m4
+echo "ifelse(`x','x','yes','no')" | ./m4
+echo "ifelse(`x','y','yes','no')" | ./m4
+echo "define(`a',`1') a define(`a',`2') a" | ./m4
+echo "[[[[[[[[[]]]]]]]]" | ./m4
+echo "pushdef(`m',`1') pushdef(`m',`2') pushdef(`m',`3') m popdef(`m') m popdef(`m') m" | ./m4
+echo "define(`empty',``') empty" | ./m4
+echo "define(`a',`define(`b',`2') b') a" | ./m4
+echo "traceon(`foo') define(`foo',`bar') foo traceoff(`foo') foo" | ./m4
+echo "define(`e',`eval(`a+b')') e" | ./m4
+echo "define(`x',`eval(`1+2')') x" | ./m4
+echo "define(`x1',`x2') define(`x2',`x3') define(`x3',`x4') define(`x4',`x5') define(`x5',`final') x1" | ./m4
+echo "define(`arg',`$10') arg" | ./m4
+echo "define(`oops',`1 2 3) oops" | ./m4
