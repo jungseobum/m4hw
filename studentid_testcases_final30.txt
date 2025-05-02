@@ -1,0 +1,31 @@
+echo "define(\`math', \`$1+$2') math(\`3', \`5')" | ./m4
+echo "define(\`wrap', \`[$1]') wrap(\`hello')" | ./m4
+echo "define(\`nest', \`define(\`inner', \`42') inner') nest" | ./m4
+echo "define(\`multi', \`[$1][$2][$3]') multi(\`a',\`b',\`c')" | ./m4
+echo "define(\`a',\`b') define(\`b',\`c') define(\`c',\`done') a" | ./m4
+echo "define(\`sum',\`$1+$2') define(\`sum',\`fail') sum(\`1',\`2')" | ./m4
+echo "define(\`x',\`1') x(\`extra',\`args')" | ./m4
+echo "define(\`eval',\`??') eval(\`1+2')" | ./m4
+echo "define(\`include',\`nope') include(\`file')" | ./m4
+echo "divert(2) divert again divert(0) undivert(2) undivert(2)" | ./m4
+echo "undivert(1000)" | ./m4
+echo "eval(\`oops')" | ./m4
+echo "eval(\`(1+2')" | ./m4
+echo "eval(\`9223372036854775807+1')" | ./m4
+echo "esyscmd(\`ls /not_exist') sysval" | ./m4
+echo "esyscmd(\`sh -c \"exit 7\"') sysval" | ./m4
+echo "undefine(\`nonexist')" | ./m4
+./m4 --help
+./m4 --version
+./m4 -Dfoo=123 -Ubar <<< 'foo bar'
+./m4 -P <<< 'm4_define(`x',`y') m4_x'
+./m4 -s <<< 'define(`twoline', `1
+2') twoline'
+./m4 -dV <<< 'define(`a',`1') a'
+./m4 --debug=lt <<< 'define(`b',`2') b'
+./m4 --warn-macro-sequence='\$[0-9][0-9]+' <<< 'define(`foo', `$10') foo'
+./m4 -I ./nonexistent <<< 'include(`file.m4')'
+./m4 -F statefile.m4f <<< 'define(`x',`1')'
+./m4 -R statefile.m4f <<< 'x'
+./m4 -o m4dbg.txt -dV <<< 'define(`z',`9') z'
+./m4 -l 10 <<< 'define(`longarg', `$1$2$3$4$5$6$7$8$9$10') longarg(a,b,c,d,e,f,g,h,i,j)'
