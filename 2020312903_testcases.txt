@@ -1,0 +1,30 @@
+echo "traceon(\`builtin') define(\`try', \`errprint(\`Trying builtin...\n') builtin(\`builtin', \`eval', \`extra')') ifelse(\`1', \`1', \`try()', \`skip')" | ./m4
+echo "define(\`xtrace',\`[$0:$#:$@]')define(\`adder',\`eval(\`$1+$2')')define(\`logic',\`ifelse(\`$1',\`0',\`zero',\`nonzero')')traceon(\`xtrace',\`adder',\`logic')xtrace(\`A',\`B')adder(\`3',\`4')logic(\`0')logic(\`1')" | ./m4
+echo "define(\`__proginfo', \`errprint(__program__:__file__:__line__\`: debug\n')')__proginfo" | ./m4
+echo "traceon(\`divert') divert(\`999') errprint(\`diverted\n') divert(\`0') undivert(\`999')" | ./m4
+./m4 --version
+echo "debugfile(\`/dev/null')traceon(\`define',\`indir',\`shift')define(\`A',\`eval(3+4)')indir(\`define',\`B',\`ok')define(\`f',\`ifelse(\`$#',\`0',\`zero',\`more')')f()f(\`x')f(\`x',\`y')define(\`g',\`$0($@)')g(\`x',\`y')shift(\`a',\`b')undefine(\`A')A" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`wrap',\`math')define(\`math',\`eval(\`$1*10+$2')')define(\`wrap',\`m4wrap(\`errprint(\`Wrap: $@\\n')')')wrap(\`math(\`1',\`2')')define(\`X',\`100')defn(\`X')indir(\`define',\`Y',\`Z')undefine(\`Y')Y" | ./m4
+echo "include(\`nofile')sinclude(\`fallback')define(\`fallback',\`ok')fallback" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`test')define(\`test',\`ifelse(\`$#', \`0', \`none', \`ifelse(\`$1', \`a', \`ok', \`bad')')')test()test(\`a')test(\`b')" | ./m4
+echo "define(\`check',\`ifdef(\$1,\`yes',\`no')')define(\`foo',\`1')check(\`foo')undefine(\`foo')check(\`foo')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`proc')define(\`proc',\`translit(format(\`[%s]',\`arg'),\`[]',\`{}')')m4wrap(\`proc()errprint(\`[done]\n')m4exit(0)')" | ./m4
+echo "debugfile(\`/dev/null')changequote(<<,>>)changecom({{,}})changeword(\`[_a-z][_a-z0-9]*')define(<<a>>,<<ok>>)a" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`test')define(\`test',\`errprint(defn(\`undefine'))')test()m4exit(0)" | ./m4
+echo "define(\`chk',\`ifelse(patsubst(\`abcXdef',\`X.*',\`Y'),\`Ydef',\`match',\`miss')')chk" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`catch')define(\`catch',\`ifelse(regexp(esyscmd(\`sh -c \"echo 404 >&2\"'),\`[0-9]+\'),\`0',\`errprint(\`FAIL\n')',\`OK')')changeword(\`[_a-z][_a-zA-Z0-9]*')m4wrap(\`catch()errprint(\`END\n')m4exit(eval(\`2+2'))')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`f')define(\`f',\`ifelse(substr(\$1,eval(\`1+1'),1),\`c',\`ok',\`fail')patsubst(\`abcabc',\`a.\*?b',\`X')shift(\`x',\`y',\`z')')define(\`wrap',\`m4wrap(\`f(\`abc')errprint(\`[WRAP]\n')m4exit(0)')')wrap" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`eval',\`printer',\`cond')define(\`printer',\`format(\`[%d]', eval(\`10*2'))')define(\`cond',\`ifelse(eval(\`5-5'),\`0',\`ok',\`fail')')define(\`runner',\`printer()cond()')m4wrap(\`runner()errprint(\`wrap done\n')m4exit(0)')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`chk',\`err')changequote(\`<<',\`>>')changeword(\`[_a-z][_a-z0-9]*')define(<<chk>>, <<ifelse($#,<<0>>,<<noarg>>,<<hasarg>>)>>)define(<<wrap>>, <<m4wrap(<<errprint(<<wrap: $@>>)>>)>>)wrap(<<chk()>>)undefine(<<chk>>)define(<<chk>>,<<error>>)chk()" | ./m4
+echo "define(\`divert_test', \`divert(\`1')divert(\`0')')divert_test" | ./m4
+echo "define(\`wraptest', \`m4wrap(\`post')')wraptest" | ./m4
+echo "ifdef(\`foo', \`defined')define(\`foo', \`x')ifdef(\`foo', \`defined')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`r1',\`r2')define(\`r1',\`regexp(\`abc123',\`[a-z]+')')define(\`r2',\`translit(\`MiXeD',\`aeiou',\`12345')')m4wrap(\`r1()r2()errprint(\`[end]\n')m4exit(0)')changeword(\`[_a-zA-Z][_a-zA-Z0-9]*')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`macro')define(\`macro',\`shift(\$@)')dumpdef(\`macro')undefine(\`macro')define(\`macro',\`format(\`%d',eval(1+2))')ifdef(\`macro',\`macro(\`a',\`b')',\`errprint(\`no macro\n')')m4wrap(\`errprint(\`WRAP\n')')changeword(\`[_a-z][_a-z0-9]*')" | ./m4
+echo "pushdef(\`a',\`1')pushdef(\`a',\`2')define(\`z',\`ifelse(a,\`1',\`ONE',a,\`2',\`TWO',\`???')')z popdef(\`a')z popdef(\`a')z define(\`cnt',\`0')define(\`side',\`define(\`cnt',incr(cnt))\$1')ifelse(side(\`foo'),\`foo',\`ok1',side(\`bar'),\`bar',\`ok2',\`fail')cnt" | ./m4
+echo "debugfile(\`/dev/null')debugmode(\`aeq')traceon(\`r')define(\`r',\`regexp(\`abc123',\`[a-z]+')')m4wrap(\`r()errprint(\`done\n')m4exit(0)')changeword(\`[_a-zA-Z][_a-zA-Z0-9]*')" | ./m4
+echo "debugfile(\`/dev/null')debugmode(\`aeq')traceon(\`r1',\`r2')define(\`r1',\`regexp(\`abc123',\`[a-z]+')')define(\`r2',\`translit(\`MiXeD',\`aeiouAEIOU',\`12345!@#$%')')m4wrap(\`r1()r2()errprint(\`[end]\n')m4exit(0)')changeword(\`[_a-zA-Z][_a-zA-Z0-9]*')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`rare')define(\`rare',\`format(\`X=%d',eval(incr(4)))')patsubst(\`abXYcdXY',\`XY',\`[$0-$1]')m4wrap(\`rare()errprint(\`END\n')m4exit(0)')changeword(\`[_a-zA-Z][_a-zA-Z0-9]*')" | ./m4
+echo "debugfile(\`/dev/null')define(\`x',\`esyscmd(\`echo test >&2')decr(10)shift(\`a',\`b',\`c')maketemp(\`/tmp/tempXXXXXX')')m4wrap(\`x()errprint(\`[e]\n')m4exit(0)')changeword(\`[_a-zA-Z][_a-zA-Z0-9]*')" | ./m4
+echo "debugfile(\`/dev/null')traceon(\`a')define(\`a',\`esyscmd(\`sh -c \"exit 2\"')patsubst(\`[[[]]]',\`[[]]',\`X')')m4wrap(\`m4wrap(\`a()')errprint(\`[WRAP]\n')m4exit(0)')" | ./m4
+echo "define(\`a', \`a') a" | ./m4
